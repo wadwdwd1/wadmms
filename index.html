@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <script>
+    function generatePassword(seed) {
+      let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let hash = '';
+      for (let i = 0; i < 32; i++) {
+        let charCode = (seed.charCodeAt(i % seed.length) + i * 31) % chars.length;
+        hash += chars.charAt(charCode);
+      }
+      return hash;
+    }
+
+    function getTodaySeed() {
+      let date = new Date();
+      return date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
+    }
+
+    function checkPassword() {
+      let input = document.getElementById("pass").value;
+      let correct = generatePassword(getTodaySeed());
+      if (input === correct) {
+        document.body.innerHTML = `<iframe src="/game.html" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;"></iframe>`;
+      } else {
+        alert("Incorrect password.");
+      }
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <h1>Enter Password</h1>
+  <form onsubmit="return checkPassword()">
+    <input type="text" id="pass" placeholder="Enter 32-char password" required style="width:300px;">
+    <button type="submit">Enter</button>
+  </form>
+</body>
+</html>
